@@ -7,7 +7,7 @@ class TCPClient {
     String sentence;
     String modifiedSentence;
     // Connect to ip
-    Socket clientSocket = new Socket("localhost", 5050);
+    Socket clientSocket = new Socket("192.168.1.7", 5050); // 192.168.1.7
     System.out.println("Succsessfully opened port");
     // Init ins and outs
     PrintWriter outToServer = new PrintWriter(clientSocket.getOutputStream(), true);
