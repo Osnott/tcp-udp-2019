@@ -17,12 +17,9 @@ print('Connection address: ' + str(addr))
 # receive data
 data = conn.recv(BUFFER_SIZE)
 print("received data " + data.decode('utf-8'))
-sendData = data
-if (data.decode('utf-8').split(' ')[0] == 'GET'):
-  if (data.decode('utf-8').split(' ')[1] == 'PING'):
-    # send back data
-    conn.send(sendData)
-print("sent data " + sendData.decode('utf-8'))
+# send back data
+conn.send(data)
+print("sent data " + data.decode('utf-8'))
 # close socket connection
 conn.close()
 
