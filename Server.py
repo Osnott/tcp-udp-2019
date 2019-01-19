@@ -6,18 +6,22 @@ class ConnectionType(Enum):
   TCP = 0
   UDP = 1
 
-def openSocket(ip = '127.0.0.1', port = 5050, type = ConnectionType.TCP):
+def openSocket(ip = '127.0.0.1', port = 5050, connType = ConnectionType.TCP):
   """
-  Opens connection to ip and port provided, defalts to 127.0.0.1 and 5050
+  Opens connection to IP and port provided, defaults to 127.0.0.1 and 5050
   """
   # connect to socket
-  if (ConnectionType.TCP):
+  if (connType == ConnectionType.TCP):
+    print("Opening TCP server")
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # bind to port and start listening for incoming connection requests
     s.bind((ip, port))
+    print('Listening for connection...')
     s.listen(1)
   else:
+    print("Opening UDP server")
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind((ip, port))
   return s
 
 def parseData(data):
@@ -28,12 +32,6 @@ def parseData(data):
 
 def sendVideoStream(s, stream, ip, port):
   s.sendto(stream, (ip, port))
-
-def gen(camera):
-  while True:
-    frame = camera.get_frame()
-    yield (b'--frame\r\n'
-      b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
 #########################################################################################################################################################################
@@ -49,8 +47,6 @@ BUFFER_SIZE = 1024
 
 # connect to socket
 s = openSocket(IP, PORT, CONNECTION_TYPE)
-
-print('Listening for connection...')
 
 if (CONNECTION_TYPE == ConnectionType.TCP):
   # accept incoming request
@@ -70,6 +66,7 @@ if (CONNECTION_TYPE == ConnectionType.TCP):
   # close socket connection
   conn.close()
 elif (CONNECTION_TYPE == ConnectionType.UDP):
-
-  feed = VideoCamera().get_frame()
-  sendVideoStream(s, feed, IP, PORT)
+  camera = VideoCamera()
+  while(True):
+    feed = camera.get_frame()
+    sendVideoStream(s, feed, IP, PORT)
