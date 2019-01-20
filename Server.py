@@ -44,6 +44,7 @@ CONNECTION_TYPE = ConnectionType.UDP
 IP = '127.0.0.1' # 192.168.1.7
 PORT = 5005
 BUFFER_SIZE = 1024
+JPEG_QUALITY = 10
 
 # connect to socket
 s = openSocket(IP, PORT, CONNECTION_TYPE)
@@ -66,7 +67,7 @@ if (CONNECTION_TYPE == ConnectionType.TCP):
   # close socket connection
   conn.close()
 elif (CONNECTION_TYPE == ConnectionType.UDP):
-  camera = VideoCamera()
-  while(True):
-    feed = camera.get_frame()
-    sendVideoStream(s, feed, IP, PORT)
+  camera = VideoCamera(JPEG_QUALITY)
+  feed = camera.get_frame()
+  sendVideoStream(s, feed, IP, PORT)
+  camera.__del__()
