@@ -1,18 +1,20 @@
 import socketserver
-from Camera import VideoCamera
+import pickle
+import cv2
 
 class UDPHandler(socketserver.BaseRequestHandler):
     def handle(self):
-        try:
-            socket = self.request[1]
-            camera = VideoCamera(10)
-            feed = camera.get_frame()
-            socket.sendto(feed, self.client_address)
-        except KeyboardInterrupt:
-            camera.__del__()
+        initial = self.request[0].strip()
+        socket = self.request[1]
+        grabbed, feed = camera.read()
+        encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 40]
+        result, encimg = cv2.imencode('.jpg', feed, encode_param)
+        feed_as_bytes = pickle.dumps(encimg)
+        # print(type(encimg))
+        # print(type(feed_as_bytes))
+        socket.sendto(feed_as_bytes, self.client_address)
 
-
-if __name__ == "__main__":
-    HOST, PORT = "localhost", 5005
-    server = socketserver.UDPServer((HOST, PORT), UDPHandler)
-    server.serve_forever()
+camera = cv2.VideoCapture(0)
+HOST, PORT = "localhost", 7446
+server = socketserver.UDPServer((HOST, PORT), UDPHandler)
+server.serve_forever()
