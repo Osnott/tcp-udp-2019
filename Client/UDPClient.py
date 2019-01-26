@@ -1,50 +1,42 @@
+import cv2
+import numpy as np
+import pickle
 import socket
 import sys
-from PySide2.QtWidgets import*
-from PySide2.QtGui import*
-from PySide2 import QtCore
+import time
 
-UDP_IP = "127.0.0.1"
-UDP_PORT = 5005
+UDP_IP = "localhost"
+UDP_PORT = 7446
+# camera = cv2.VideoCapture(0)
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+top_ping = 0
+pings = []
 
-sock = socket.socket(socket.AF_INET, # Internet
-                     socket.SOCK_DGRAM) # UDP
+while True:
+    data = "".encode('utf-8')
+    start = time.time()
+    sock.sendto(data, (UDP_IP, UDP_PORT))
+    bytes_data = sock.recv(65536)
+    end = time.time()
+    data = pickle.loads(bytes_data)
+    # print(type(data))
+    # grabbed, frame = camera.read()
+    # frame = cv2.flip(frame, 1)
+    decimg = cv2.imdecode(data, 1)
+    cv2.imshow("Jetson Camera", decimg)
+    ping = ((end-start) * 1000)
+    print("Ping: " + str(ping))
+    pings.append(ping)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        top_ping = 0
+        all_pings = 0
+        for ping in pings:
+            if ping > top_ping:
+                top_ping = ping
+            all_pings += ping
+        print("Total Pings: " + str(len(pings)))
+        print("Top Ping: " + str(top_ping))
+        print("Average Ping: " + str(all_pings/len(pings)))
+        break
 
-sock.connect((UDP_IP, UDP_PORT))
-# example event handler
-def quit_app():
-    global application
-    print("Quit!")
-    application.exit()
-
-
-# base application object for our app
-application = QApplication(sys.argv)
-
-# Create a Window
-window = QWidget()
-window.setWindowTitle("View Image")
-
-# button
-button = QPushButton("Quit", window)
-
-# on click handler
-button.clicked.connect(quit_app)
-
-# set up the label widget to display the pic
-label = QLabel(window)
-label.setPixmap(picture)
-label.setGeometry(QtCore.QRect(10, 40, picture.width(), picture.height()))
-
-# embiggen the window to correctly fit the pic
-window.resize(picture.width()+20, picture.height()+100)
-window.show()
-
-# Let QT do its thing
-sys.exit(application.exec_())
-
-data, addr = sock.recvfrom(65536)
-print("received message:", data)
-
-# Load Pic
-picture = QPixmap("background.png")
+cv2.destroyAllWindows()
