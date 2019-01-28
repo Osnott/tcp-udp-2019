@@ -14,8 +14,8 @@ class UDPHandler(socketserver.BaseRequestHandler):
             result, encimg = cv2.imencode('.jpg', feed, encode_param)
             feed_as_bytes = pickle.dumps(encimg)
             pickled_packets = pickle.dumps(packets)
-            # packet = pickle.dumps([feed_as_bytes, pickled_packets])
-            socket.sendto([feed_as_bytes, pickled_packets], self.client_address)
+            packet = pickle.dumps([feed_as_bytes, pickled_packets])
+            socket.sendto(packet, self.client_address)
             packets = packets + 1
 
 camera = cv2.VideoCapture(0)

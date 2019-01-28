@@ -39,10 +39,12 @@ while True:
         packets_lost = packets_lost + 1
     else:
         data = pickle.loads(bytes_data)
+        img = pickle.loads(data[0])
+        recv_packet = pickle.loads(data[1])
         # print(type(data))
         # grabbed, frame = camera.read()
         # frame = cv2.flip(frame, 1)
-        decimg = cv2.imdecode(data, 1)
+        decimg = cv2.imdecode(img, 1)
         cv2.imshow("Jetson Camera", decimg)
         ping = ((end-start) * 1000)
         print("Ping: " + str(ping))
