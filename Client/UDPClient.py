@@ -16,6 +16,8 @@ pings = []
 packets_lost = 0
 start = 0
 end = 0
+expected_packet = 0
+recv_packet = 0
 
 data = "W".encode('utf-8')
 sock.sendto(data, (UDP_IP, UDP_PORT))
