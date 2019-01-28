@@ -7,7 +7,7 @@ import time
 import threading
 import select
 
-UDP_IP = "localhost"
+UDP_IP = "192.168.43.235"
 UDP_PORT = 9999
 # camera = cv2.VideoCapture(0)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -17,9 +17,10 @@ packets_lost = 0
 start = 0
 end = 0
 
+data = "W".encode('utf-8')
+sock.sendto(data, (UDP_IP, UDP_PORT))
+
 while True:
-    data = "W".encode('utf-8')
-    sock.sendto(data, (UDP_IP, UDP_PORT))
     start = time.time()
     try:
         bytes_data = sock.recv(65536)

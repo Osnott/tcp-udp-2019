@@ -6,14 +6,15 @@ class UDPHandler(socketserver.BaseRequestHandler):
     def handle(self):
         initial = self.request[0].strip()
         socket = self.request[1]
-        print("CONNECTED: " + str(initial.decode('utf-8')))
-        grabbed, feed = camera.read()
-        encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 40]
-        result, encimg = cv2.imencode('.jpg', feed, encode_param)
-        feed_as_bytes = pickle.dumps(encimg)
-        socket.sendto(feed_as_bytes, self.client_address)
+        while True:
+            print("CONNECTED: " + str(initial.decode('utf-8')))
+            grabbed, feed = camera.read()
+            encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 40]
+            result, encimg = cv2.imencode('.jpg', feed, encode_param)
+            feed_as_bytes = pickle.dumps(encimg)
+            socket.sendto(feed_as_bytes, self.client_address)
 
 camera = cv2.VideoCapture(0)
-HOST, PORT = "localhost", 9999
+HOST, PORT = "192.168.43.235", 9999
 server = socketserver.UDPServer((HOST, PORT), UDPHandler)
 server.serve_forever()
