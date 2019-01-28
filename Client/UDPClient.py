@@ -34,21 +34,27 @@ while True:
         print("ERROR! COULD NOT ESTABLISH A CONNECTION!")
         sys.exit(0)
     end = time.time()
-    if data == "":
-        print("ERROR! LOST A PACKET!")
+    data = pickle.loads(bytes_data)
+    img = pickle.loads(data[0])
+    recv_packet = pickle.loads(data[1])
+    # print(type(data))
+    # grabbed, frame = camera.read()
+    # frame = cv2.flip(frame, 1)
+    decimg = cv2.imdecode(img, 1)
+    cv2.imshow("Jetson Camera", decimg)
+    ping = ((end-start) * 1000)
+    print("Ping: " + str(ping))
+    pings.append(ping)
+    if expected_packet >= 30:
+        if recv_packet != 0:
+            print("LOST A PACKET!")
+            packets_lost = packets_lost + 1
+        expected_packet = recv_packet
+    elif expected_packet != recv_packet:
         packets_lost = packets_lost + 1
+        expected_packet = recv_packet
     else:
-        data = pickle.loads(bytes_data)
-        img = pickle.loads(data[0])
-        recv_packet = pickle.loads(data[1])
-        # print(type(data))
-        # grabbed, frame = camera.read()
-        # frame = cv2.flip(frame, 1)
-        decimg = cv2.imdecode(img, 1)
-        cv2.imshow("Jetson Camera", decimg)
-        ping = ((end-start) * 1000)
-        print("Ping: " + str(ping))
-        pings.append(ping)
+        expected_packet = expected_packet + 1
     if cv2.waitKey(1) & 0xFF == ord('q'):
         top_ping = 0
         all_pings = 0
