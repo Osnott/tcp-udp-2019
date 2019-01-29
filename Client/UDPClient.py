@@ -1,68 +1,33 @@
 import cv2
-import pickle
-import socket
 import sys
 import time
+from ClientHandler import openServer, recvData, decodeData, checkLostPackets, calculatePings # noqa
 
 UDP_IP = str(sys.argv[1])  # "192.168.43.235"
 UDP_PORT = 9999
 print("CONNECTING TO " + UDP_IP + " ON PORT " + str(UDP_PORT))
-# camera = cv2.VideoCapture(0)
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.settimeout(5)
-pings = []
-packets_lost = 0
-start = 0
-end = 0
-expected_packet = 0
-recv_packet = 0
-
-data = "W".encode('utf-8')
-sock.sendto(data, (UDP_IP, UDP_PORT))
+sock, pings, packets_lost, start, end, expected_packet, recv_packet = openServer(UDP_IP, UDP_PORT)  # noqa
 
 while True:
     start = time.time()
-    try:
-        bytes_data = sock.recv(65536)
-    except socket.timeout:
-        print("ERROR! CONNECTION LOST OR SERVER NOT OPEN!\n")
-        print("EXITING")
-        sys.exit(0)
-    except ConnectionResetError:
-        print("ERROR! COULD NOT ESTABLISH A CONNECTION!\n")
-        print("EXITING")
-        sys.exit(0)
+    bytes_data = recvData(sock, 65536)
     end = time.time()
-    data = pickle.loads(bytes_data)
-    img = pickle.loads(data[0])
-    recv_packet = pickle.loads(data[1])
-    # print(type(data))
-    # grabbed, frame = camera.read()
-    # frame = cv2.flip(frame, 1)
-    decimg = cv2.imdecode(img, 1)
-    cv2.imshow("Jetson Camera", decimg)
+    recv_packet, decimg = decodeData(bytes_data)
     ping = ((end-start) * 1000)
-    print("Ping: " + str(ping))
     pings.append(ping)
-    if expected_packet != recv_packet:
-        print("LOST PACKET(S)!")
-        packets_lost = packets_lost + (recv_packet - expected_packet)
-        expected_packet = recv_packet + 1
-    else:
-        expected_packet = expected_packet + 1
+    top_ping, all_pings = calculatePings(pings)
+    cv2.putText(decimg, "Ping: " + str(round(ping)) + "ms", (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)  # noqa
+    cv2.putText(decimg, "Average Ping: " + str(round(all_pings/len(pings))) + "ms", (10, 460), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, cv2.LINE_AA)  # noqa
+    cv2.imshow("Jetson Camera", decimg)
+    print("Ping: " + str(round(ping)) + "ms")
+    expected_packet, packets_lost = checkLostPackets(expected_packet, recv_packet, packets_lost)  # noqa
     if cv2.waitKey(1) & 0xFF == ord('q'):
-        top_ping = 0
-        all_pings = 0
-        for ping in pings:
-            if ping > top_ping:
-                top_ping = ping
-            all_pings += ping
-        print("\nEXITING\n-----------------")
-        print("Total Pings: " + str(len(pings)))
-        print("Top Ping: " + str(top_ping))
-        print("Average Ping: " + str(all_pings/len(pings)))
-        print("Packets Lost: " + str(packets_lost))
-        print("Packet Loss: " + str((packets_lost/expected_packet)*100))
+        print("\n--------------EXITING--------------\n")
+        print("Total Pings: " + str(len(pings)) + " pings")
+        print("Top Ping: " + str(round(top_ping)) + "ms")
+        print("Average Ping: " + str(round(all_pings/len(pings))) + "ms")
+        print("Packets Lost: " + str(packets_lost) + " packets")
+        print("Packet Loss: " + str(round((packets_lost/expected_packet)*100)) + "%")  # noqa
         break
 
 cv2.destroyAllWindows()
