@@ -1,14 +1,12 @@
 import cv2
-import numpy as np
 import pickle
 import socket
 import sys
 import time
-import threading
-import select
 
-UDP_IP = "192.168.43.235"
+UDP_IP = str(sys.argv[1])  # "192.168.43.235"
 UDP_PORT = 9999
+print("CONNECTING TO " + UDP_IP + " ON PORT " + str(UDP_PORT))
 # camera = cv2.VideoCapture(0)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.settimeout(5)
@@ -26,12 +24,13 @@ while True:
     start = time.time()
     try:
         bytes_data = sock.recv(65536)
-    except socket.timeout as e:
-        print("ERROR! CONNECTION LOST!")
-        print("\nEXITING")
+    except socket.timeout:
+        print("ERROR! CONNECTION LOST OR SERVER NOT OPEN!\n")
+        print("EXITING")
         sys.exit(0)
-    except ConnectionResetError as e:
-        print("ERROR! COULD NOT ESTABLISH A CONNECTION!")
+    except ConnectionResetError:
+        print("ERROR! COULD NOT ESTABLISH A CONNECTION!\n")
+        print("EXITING")
         sys.exit(0)
     end = time.time()
     data = pickle.loads(bytes_data)

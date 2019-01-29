@@ -2,6 +2,7 @@ import socketserver
 import pickle
 import cv2
 
+
 class UDPHandler(socketserver.BaseRequestHandler):
     def handle(self):
         initial = self.request[0].strip()
@@ -18,7 +19,8 @@ class UDPHandler(socketserver.BaseRequestHandler):
             socket.sendto(packet, self.client_address)
             packets = packets + 1
 
+
 camera = cv2.VideoCapture(0)
-HOST, PORT = "192.168.43.235", 9999
+HOST, PORT = "localhost", 9999  # 192.168.43.235
 server = socketserver.UDPServer((HOST, PORT), UDPHandler)
 server.serve_forever()

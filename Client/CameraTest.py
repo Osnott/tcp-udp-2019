@@ -4,6 +4,7 @@ import cv2
 from PySide2 import QtCore, QtGui, QtWidgets
 import threading
 
+
 class CameraDisplay(QtWidgets.QLabel):
   def __init__(self):
     super(CameraDisplay, self).__init__()
