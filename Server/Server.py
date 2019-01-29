@@ -7,7 +7,7 @@ class UDPHandler(socketserver.BaseRequestHandler):
     def handle(self):
         initial = self.request[0].strip()
         socket = self.request[1]
-        packets = 0
+        packets = 1
         while True:
             print("CONNECTED: " + str(initial.decode('utf-8')))
             grabbed, feed = camera.read()

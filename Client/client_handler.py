@@ -11,12 +11,12 @@ def openServer(ip, port):
     packets_lost = 0
     start = 0
     end = 0
-    expected_packet = 0
+    expected_packet = 1
     recv_packet = 0
 
     data = "W".encode('utf-8')
     sock.sendto(data, (ip, port))
-    return sock, pings, packets_lost, start, end, expected_packet, recv_packet  # noqa
+    return sock, pings, packets_lost, start, end, expected_packet, recv_packet
 
 
 def recvData(sock, buffer):
