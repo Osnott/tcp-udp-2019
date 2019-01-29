@@ -45,14 +45,10 @@ while True:
     ping = ((end-start) * 1000)
     print("Ping: " + str(ping))
     pings.append(ping)
-    if expected_packet >= 30:
-        if recv_packet != 0:
-            print("LOST A PACKET!")
-            packets_lost = packets_lost + 1
-        expected_packet = recv_packet
-    elif expected_packet != recv_packet:
-        packets_lost = packets_lost + 1
-        expected_packet = recv_packet
+    if expected_packet != recv_packet:
+        print("LOST PACKET(S)!")
+        packets_lost = packets_lost + (recv_packet - expected_packet)
+        expected_packet = recv_packet + 1
     else:
         expected_packet = expected_packet + 1
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -67,6 +63,7 @@ while True:
         print("Top Ping: " + str(top_ping))
         print("Average Ping: " + str(all_pings/len(pings)))
         print("Packets Lost: " + str(packets_lost))
+        print("Packet Loss: " + str((packets_lost/expected_packet)*100))
         break
 
 cv2.destroyAllWindows()

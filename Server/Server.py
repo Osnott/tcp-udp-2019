@@ -16,10 +16,7 @@ class UDPHandler(socketserver.BaseRequestHandler):
             pickled_packets = pickle.dumps(packets)
             packet = pickle.dumps([feed_as_bytes, pickled_packets])
             socket.sendto(packet, self.client_address)
-            if packets >= 30:
-                packets = 0
-            else:
-                packets = packets + 1
+            packets = packets + 1
 
 camera = cv2.VideoCapture(0)
 HOST, PORT = "192.168.43.235", 9999
