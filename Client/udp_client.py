@@ -24,7 +24,7 @@ while True:
     cv2.putText(decimg, "Packet Loss: " + str(round((packets_lost/(expected_packet + 1)) * 100)) + "%", (450, 460), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
     cv2.putText(decimg, "Average Ping: " + str(round(all_pings/len(pings))) + "ms", (10, 460), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
     if ping >= 100:
-        cv2.putText(decimg, "HIGH PING!", (250, 35), font, 0.5, (255, 0, 0), 1, cv2.LINE_AA)
+        cv2.putText(decimg, "HIGH PING!", (250, 35), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
     cv2.imshow("Jetson Camera", decimg)
     # print("Ping: " + str(round(ping)) + "ms")
     expected_packet, packets_lost = checkLostPackets(expected_packet, recv_packet, packets_lost)
