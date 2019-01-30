@@ -5,11 +5,11 @@ import cv2
 
 class UDPHandler(socketserver.BaseRequestHandler):
     def handle(self):
-        initial = self.request[0].strip()
+        # initial = self.request[0].strip()
         socket = self.request[1]
-        packets = 1
+        packets = 0
         while True:
-            print("CONNECTED: " + str(initial.decode('utf-8')))
+            # print("CONNECTED: " + str(initial.decode('utf-8')))
             grabbed, feed = camera.read()
             encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 40]
             result, encimg = cv2.imencode('.jpg', feed, encode_param)

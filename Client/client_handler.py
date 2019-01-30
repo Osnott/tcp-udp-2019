@@ -11,7 +11,7 @@ def openServer(ip, port):
     packets_lost = 0
     start = 0
     end = 0
-    expected_packet = 1
+    expected_packet = 0
     recv_packet = 0
 
     data = "W".encode('utf-8')
