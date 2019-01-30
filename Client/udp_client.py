@@ -26,7 +26,6 @@ while True:
     if ping >= 100:
         cv2.putText(decimg, "HIGH PING!", (250, 35), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
     cv2.imshow("Jetson Camera", decimg)
-    # print("Ping: " + str(round(ping)) + "ms")
     expected_packet, packets_lost = checkLostPackets(expected_packet, recv_packet, packets_lost)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         print("\n--------------EXITING--------------\n")

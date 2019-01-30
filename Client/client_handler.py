@@ -5,6 +5,9 @@ import sys
 
 
 def openServer(ip, port):
+    """
+    Connect to the server specified in the ip and port parameters
+    """
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.settimeout(5)
     pings = []
@@ -20,6 +23,9 @@ def openServer(ip, port):
 
 
 def recvData(sock, buffer):
+    """
+    Recieves data and also checks for timeouts and disconnects.
+    """
     try:
         bytes_data = sock.recv(buffer)
     except socket.timeout:
@@ -34,14 +40,20 @@ def recvData(sock, buffer):
 
 
 def decodeData(bytes_data):
+    """
+    Decodes data and returns the package number and decoded image.
+    """
     data = pickle.loads(bytes_data)
-    img = pickle.loads(data[0])
-    recv_packet = pickle.loads(data[1])
+    img = data[0]
+    recv_packet = data[1]
     decimg = cv2.imdecode(img, 1)
     return recv_packet, decimg
 
 
 def checkLostPackets(expected_packet, recv_packet, packets_lost):
+    """
+    Preforms checks for lost packets
+    """
     if expected_packet != recv_packet:
         print("-----------------------LOST PACKET(S)!-----------------------")
         packets_lost = packets_lost + (recv_packet - expected_packet)
@@ -52,6 +64,9 @@ def checkLostPackets(expected_packet, recv_packet, packets_lost):
 
 
 def calculatePings(pings):
+    """
+    Calculates top and total pings
+    """
     top_ping = 0
     all_pings = 0
     for ping in pings:

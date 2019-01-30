@@ -13,9 +13,7 @@ class UDPHandler(socketserver.BaseRequestHandler):
             grabbed, feed = camera.read()
             encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 40]
             result, encimg = cv2.imencode('.jpg', feed, encode_param)
-            feed_as_bytes = pickle.dumps(encimg)
-            pickled_packets = pickle.dumps(packets)
-            packet = pickle.dumps([feed_as_bytes, pickled_packets])
+            packet = pickle.dumps([encimg, packets])
             socket.sendto(packet, self.client_address)
             packets = packets + 1
 
