@@ -55,7 +55,7 @@ def checkLostPackets(expected_packet, recv_packet, packets_lost):
     Preforms checks for lost packets
     """
     if expected_packet != recv_packet:
-        print("-----------------------LOST PACKET(S)!-----------------------")
+        print("--------------------LOST PACKET(S) OR FRAME OUT OF ORDER!--------------------")
         packets_lost = packets_lost + (recv_packet - expected_packet)
         expected_packet = recv_packet + 1
     else:

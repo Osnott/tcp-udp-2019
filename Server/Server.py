@@ -1,4 +1,5 @@
 import socketserver
+import sys
 import pickle
 import cv2
 
@@ -19,6 +20,8 @@ class UDPHandler(socketserver.BaseRequestHandler):
 
 
 camera = cv2.VideoCapture(0)
-HOST, PORT = "localhost", 9999  # 192.168.43.235
+HOST, PORT = str(sys.argv[1]), 9999  # 192.168.43.235
+print("STARTING SERVER ON " + HOST + " ON PORT " + str(PORT))
 server = socketserver.UDPServer((HOST, PORT), UDPHandler)
+print("SERVER ONLINE")
 server.serve_forever()
