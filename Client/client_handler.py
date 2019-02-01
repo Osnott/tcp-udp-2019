@@ -8,18 +8,21 @@ def openServer(ip, port):
     """
     Connect to the server specified in the ip and port parameters
     """
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.settimeout(5)
-    pings = []
-    packets_lost = 0
-    start = 0
-    end = 0
-    expected_packet = 0
-    recv_packet = 0
 
+    client = {
+        'sock': socket.socket(socket.AF_INET, socket.SOCK_DGRAM),
+        'pings': [],
+        'packets_lost': 0,
+        'start': 0,
+        'end': 0,
+        'expected_packet': 0,
+        'recv_packet': 0
+    }
+
+    client['sock'].settimeout(5)
     data = "W".encode('utf-8')
-    sock.sendto(data, (ip, port))
-    return sock, pings, packets_lost, start, end, expected_packet, recv_packet
+    client['sock'].sendto(data, (ip, port))
+    return client
 
 
 def recvData(sock, buffer):
@@ -69,8 +72,10 @@ def calculatePings(pings):
     """
     top_ping = 0
     all_pings = 0
+    if len(pings) >= 900:
+        pings = []
     for ping in pings:
         if ping > top_ping:
             top_ping = ping
         all_pings += ping
-    return top_ping, all_pings
+    return top_ping, all_pings, pings
