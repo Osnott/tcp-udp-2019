@@ -19,9 +19,9 @@ def openServer(ip, port):
         'recv_packet': 0
     }
 
+    client['sock'].setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     client['sock'].settimeout(5)
-    data = "W".encode('utf-8')
-    client['sock'].sendto(data, (ip, port))
+    client['sock'].bind((ip, port))
     return client
 
 
@@ -30,7 +30,7 @@ def recvData(sock, buffer):
     Recieves data and also checks for timeouts and disconnects.
     """
     try:
-        bytes_data = sock.recv(buffer)
+        bytes_data, addr = sock.recvfrom(buffer)
     except socket.timeout:
         print("ERROR! CONNECTION LOST OR SERVER NOT OPEN!\n")
         print("EXITING")
@@ -73,7 +73,8 @@ def calculatePings(pings):
     top_ping = 0
     all_pings = 0
     if len(pings) >= 900:
-        pings = []
+        pings.clear()
+        pings.append(0)
     for ping in pings:
         if ping > top_ping:
             top_ping = ping
