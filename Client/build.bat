@@ -1,0 +1,1 @@
+pyinstaller -i ico/udp_icon.ico udp_client.py
