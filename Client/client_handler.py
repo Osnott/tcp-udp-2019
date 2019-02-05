@@ -19,18 +19,20 @@ def openServer(ip, port):
         'recv_packet': 0
     }
 
-    client['sock'].setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    # client['sock'].setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     client['sock'].settimeout(5)
-    client['sock'].bind((ip, port))
+    data = "W".encode('utf-8')
+    client['sock'].sendto(data, (ip, port))
+    # client['sock'].bind((ip, port))
     return client
 
 
-def recvData(sock, buffer):
+def recvData(sock, client, ip, port, buffer):
     """
     Recieves data and also checks for timeouts and disconnects.
     """
     try:
-        bytes_data, addr = sock.recvfrom(buffer)
+        bytes_data = sock.recv(buffer)
     except socket.timeout:
         print("ERROR! CONNECTION LOST OR SERVER NOT OPEN!\n")
         print("EXITING")
@@ -39,7 +41,17 @@ def recvData(sock, buffer):
         print("ERROR! COULD NOT ESTABLISH A CONNECTION!\n")
         print("EXITING")
         sys.exit(0)
+
     return bytes_data
+
+
+def keepAlive(sock, ip, port):
+    """
+    Sends the keep alive
+    """
+
+    data = "W".encode('utf-8')
+    sock.sendto(data, (ip, port))
 
 
 def decodeData(bytes_data):

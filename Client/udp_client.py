@@ -1,7 +1,7 @@
 import cv2
 import sys
 import time
-from client_handler import openServer, recvData, decodeData, checkLostPackets, calculatePings
+from client_handler import openServer, recvData, decodeData, checkLostPackets, calculatePings, keepAlive
 import client_gui as gui
 
 serverData = {}
@@ -26,7 +26,7 @@ while True:
     client['ping'] = ((end-start) * 1000)
     client['pings'].append(client['ping'])
     top_ping, all_pings, client['pings'] = calculatePings(client['pings'])
-    print(client['expected_packet'])
+    keepAlive(client['sock'], UDP_IP, UDP_PORT)
     if DEBUG:
         cv2.putText(decimg, "Ping: " + str(round(client['ping'])) + "ms", (10, 35), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
         cv2.putText(decimg, "Packets Lost: " + str(client['packets_lost']) + " packets", (425, 35), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
