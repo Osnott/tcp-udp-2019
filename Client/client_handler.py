@@ -27,7 +27,7 @@ def openServer(ip, port):
     return client
 
 
-def recvData(sock, client, ip, port, buffer):
+def recvData(sock, buffer):
     """
     Recieves data and also checks for timeouts and disconnects.
     """
