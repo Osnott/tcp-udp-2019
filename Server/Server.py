@@ -22,7 +22,7 @@ class DriverstationConnectionHandler(socketserver.BaseRequestHandler):
 camera = cv2.VideoCapture(0)
 HOST, PORT = str(sys.argv[1]), 9999  # 192.168.43.235
 print("STARTING SERVER ON " + HOST + " ON PORT " + str(PORT))
-server = socketserver.UDPServer((HOST, PORT), DriverstationConnectionHandler())
+server = socketserver.UDPServer((HOST, PORT), DriverstationConnectionHandler)
 print("SERVER ONLINE")
 server.serve_forever()
 
