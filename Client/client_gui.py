@@ -1,9 +1,10 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+import sys
 
-serverData = {}
 ready = False
 exited = False
+serverData = {}
 m = tk.Tk()
 m.title('UDP Client')
 ip = ttk.Label(m, background="#282f38", foreground="#eaeaea", text='IP').grid(row=0)
@@ -29,15 +30,38 @@ def startServer():
     m.destroy()
 
 
+def restartServer():
+    global ready
+    ready = True
+    m.destroy()
+
+
 def exit_me():
     global exited, m
     exited = True
     m.destroy()
 
 
+def exit_final():
+    global m
+    m.destroy()
+    sys.exit(0)
+
+
+def reopen():
+    global exited, ready, m
+    exited = False
+    ready = False
+    m = tk.Tk()
+    m.title('UDP Client')
+    header = ttk.Label(m, background="#282f38", foreground="#eaeaea", text='Retry Connection?').grid(row=0)
+    yesButton = tk.Button(m, background="#474c56", foreground="#eaeaea", text='Yes', width=25, command=restartServer).grid(row=3, column=1)
+    noButton = tk.Button(m, background="#474c56", foreground="#eaeaea", text='No', width=25, command=exit_final).grid(row=3, column=0)
+    m.configure(bg='#282f38')
+    m.mainloop()
+
+
 startButton = tk.Button(m, background="#474c56", foreground="#eaeaea", text='Start Server', width=25, command=startServer).grid(row=3, column=1)
 exitButton = tk.Button(m, background="#474c56", foreground="#eaeaea", text='Exit', width=25, command=exit_me).grid(row=3, column=0)
-
 m.configure(bg='#282f38')
-
 m.mainloop()

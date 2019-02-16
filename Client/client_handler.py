@@ -1,14 +1,17 @@
 import cv2
 import pickle
 import socket
-import sys
+
+failedInit = False
 
 
 def openServer(ip, port):
     """
     Connect to the server specified in the ip and port parameters
     """
+    global failedInit
 
+    failedInit = False
     client = {
         'sock': socket.socket(socket.AF_INET, socket.SOCK_DGRAM),
         'pings': [],
@@ -31,17 +34,21 @@ def recvData(sock, buffer):
     """
     Recieves data and also checks for timeouts and disconnects.
     """
+    global failedInit
+
     try:
         bytes_data = sock.recv(buffer)
     except socket.timeout:
         print("ERROR! CONNECTION LOST OR SERVER NOT OPEN!\n")
         print("EXITING")
-        sys.exit(0)
+        failedInit = True
+        bytes_data = b''
     except ConnectionResetError:
         print("ERROR! COULD NOT ESTABLISH A CONNECTION!\n")
         print("EXITING")
-        sys.exit(0)
-
+        failedInit = True
+        bytes_data = b''
+    
     return bytes_data
 
 
