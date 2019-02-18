@@ -1,4 +1,0 @@
-language: python
-
-script:
-   - make Client/main.py
