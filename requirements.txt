@@ -1,1 +1,2 @@
 PySide2==5.12.1
+opencv-python==2.4.9
