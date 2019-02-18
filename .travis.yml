@@ -1,4 +1,4 @@
 language: python
 
 script:
-   - make test
+   - make Client/main.py
