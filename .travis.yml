@@ -2,5 +2,5 @@ language: python
 python:
   - "3.6"
 install:
-  - pip install --user --upgrade setuptools wheel
+  - pip install setuptools wheel
 script: python3 setup.py sdist bdist_wheel
