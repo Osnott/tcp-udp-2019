@@ -54,9 +54,9 @@ def reopen():
     ready = False
     m = tk.Tk()
     m.title('UDP Client')
-    header = ttk.Label(m, background="#282f38", foreground="#eaeaea", text='Retry Connection?').grid(row=0)
-    yesButton = tk.Button(m, background="#474c56", foreground="#eaeaea", text='Yes', width=25, command=restartServer).grid(row=3, column=1)
-    noButton = tk.Button(m, background="#474c56", foreground="#eaeaea", text='No', width=25, command=exit_final).grid(row=3, column=0)
+    ttk.Label(m, background="#282f38", foreground="#eaeaea", text='Connection Lost/Could Not Connect: Retry Connection?').grid(row=0)
+    tk.Button(m, background="#474c56", foreground="#eaeaea", text='Yes', width=25, command=restartServer).grid(row=3, column=1)
+    tk.Button(m, background="#474c56", foreground="#eaeaea", text='No', width=25, command=exit_final).grid(row=3, column=0)
     m.configure(bg='#282f38')
     m.mainloop()
 

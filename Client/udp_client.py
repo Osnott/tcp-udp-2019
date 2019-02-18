@@ -40,9 +40,10 @@ def start():
         cv2.putText(decimg, "Average Ping: " + str(round(all_pings/len(client['pings']) + 1)) + "ms", (10, 460), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
         if client['ping'] >= 100:
             cv2.putText(decimg, "HIGH PING!", (250, 35), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
-        cv2.namedWindow("Jetson Camera", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("Jetson Camera", 800, 600)
+        cv2.namedWindow("Jetson Camera")
         cv2.imshow("Jetson Camera", decimg)
+        height, width, channels = decimg.shape
+        cv2.resizeWindow('Jetson Camera', width, height)
         client['expected_packet'], client['packets_lost'] = checkLostPackets(client['expected_packet'], client['recv_packet'], client['packets_lost'])
         if cv2.waitKey(1) & 0xFF == ord('q'):
             print("\n--------------EXITING--------------\n")
@@ -53,3 +54,7 @@ def start():
             print("Packet Loss: " + str(round((client['packets_lost']/client['expected_packet'])*100)) + "%")
             exited = True
             break
+
+
+def close():
+    cv2.destroyAllWindows()
