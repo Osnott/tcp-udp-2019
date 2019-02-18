@@ -5,4 +5,4 @@ install:
   - pip install -r requirements.txt
 services:
   - xvfb
-script: python Client/main.py
+script: xvfb-run python Client/main.py
