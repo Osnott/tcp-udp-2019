@@ -29,15 +29,15 @@ def start():
         if bytes_data == b'':
             break
         client['recv_packet'], decimg = decodeData(bytes_data)
-        client['ping'] = ((end-start) * 1000)
+        client['ping'] = ((end - start) * 1000)
         client['pings'].append(client['ping'])
         top_ping, all_pings, client['pings'] = calculatePings(client['pings'])
         # keepAlive(client['sock'], UDP_IP, UDP_PORT_SEND)
         if DEBUG:
             cv2.putText(decimg, "Ping: " + str(round(client['ping'])) + "ms", (10, 35), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
             cv2.putText(decimg, "Packets Lost: " + str(client['packets_lost']) + " packets", (425, 35), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
-            cv2.putText(decimg, "Packet Loss: " + str(round((client['packets_lost']/(client['expected_packet'] + 1)) * 100)) + "%", (450, 460), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
-        cv2.putText(decimg, "Average Ping: " + str(round(all_pings/len(client['pings']) + 1)) + "ms", (10, 460), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
+            cv2.putText(decimg, "Packet Loss: " + str(round((client['packets_lost'] / (client['expected_packet'] + 1)) * 100)) + "%", (450, 460), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
+        cv2.putText(decimg, "Average Ping: " + str(round(all_pings / len(client['pings']) + 1)) + "ms", (10, 460), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
         if client['ping'] >= 100:
             cv2.putText(decimg, "HIGH PING!", (250, 35), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
         cv2.namedWindow("Jetson Camera")
@@ -49,9 +49,9 @@ def start():
             print("\n--------------EXITING--------------\n")
             print("Total Pings: " + str(len(client['pings'])) + " pings")
             print("Top Ping: " + str(round(top_ping)) + "ms")
-            print("Average Ping: " + str(round(all_pings/len(client['pings']))) + "ms")
+            print("Average Ping: " + str(round(all_pings / len(client['pings']))) + "ms")
             print("Packets Lost: " + str(client['packets_lost']) + " packets")
-            print("Packet Loss: " + str(round((client['packets_lost']/client['expected_packet'])*100)) + "%")
+            print("Packet Loss: " + str(round((client['packets_lost'] / client['expected_packet']) * 100)) + "%")
             exited = True
             break
 
