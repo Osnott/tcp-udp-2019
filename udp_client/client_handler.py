@@ -48,7 +48,6 @@ def recvData(sock, buffer):
         print("EXITING")
         failedInit = True
         bytes_data = b''
-    
     return bytes_data
 
 
