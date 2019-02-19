@@ -1,42 +1,63 @@
 import cv2
 import pickle
 import socket
-import sys
+
+failedInit = False
 
 
 def openServer(ip, port):
     """
     Connect to the server specified in the ip and port parameters
     """
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.settimeout(5)
-    pings = []
-    packets_lost = 0
-    start = 0
-    end = 0
-    expected_packet = 0
-    recv_packet = 0
+    global failedInit
 
+    failedInit = False
+    client = {
+        'sock': socket.socket(socket.AF_INET, socket.SOCK_DGRAM),
+        'pings': [],
+        'packets_lost': 0,
+        'start': 0,
+        'end': 0,
+        'expected_packet': 0,
+        'recv_packet': 0
+    }
+
+    # client['sock'].setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    client['sock'].settimeout(5)
     data = "W".encode('utf-8')
-    sock.sendto(data, (ip, port))
-    return sock, pings, packets_lost, start, end, expected_packet, recv_packet
+    client['sock'].sendto(data, (ip, port))
+    # client['sock'].bind((ip, port))
+    return client
 
 
 def recvData(sock, buffer):
     """
     Recieves data and also checks for timeouts and disconnects.
     """
+    global failedInit
+
     try:
         bytes_data = sock.recv(buffer)
     except socket.timeout:
         print("ERROR! CONNECTION LOST OR SERVER NOT OPEN!\n")
         print("EXITING")
-        sys.exit(0)
+        failedInit = True
+        bytes_data = b''
     except ConnectionResetError:
         print("ERROR! COULD NOT ESTABLISH A CONNECTION!\n")
         print("EXITING")
-        sys.exit(0)
+        failedInit = True
+        bytes_data = b''
     return bytes_data
+
+
+def keepAlive(sock, ip, port):
+    """
+    Sends the keep alive
+    """
+
+    data = "W".encode('utf-8')
+    sock.sendto(data, (ip, port))
 
 
 def decodeData(bytes_data):
@@ -69,8 +90,11 @@ def calculatePings(pings):
     """
     top_ping = 0
     all_pings = 0
+    if len(pings) >= 900:
+        pings.clear()
+        pings.append(0)
     for ping in pings:
         if ping > top_ping:
             top_ping = ping
         all_pings += ping
-    return top_ping, all_pings
+    return top_ping, all_pings, pings
