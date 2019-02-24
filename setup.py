@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="udp-client-osnott",
+    name="udp_client_osnott",
     version="0.1.0",
     author="Aiden Onstott",
     author_email="aidenonstott@gmail.com",

@@ -1,5 +1,5 @@
-import udp_client as client
-import client_gui as gui
+from udp_client import start, close
+from client_gui import reopen
 import client_handler as handler
 import sys
 
