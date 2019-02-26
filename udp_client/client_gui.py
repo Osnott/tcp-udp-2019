@@ -61,7 +61,7 @@ def reopen():
     m.mainloop()
 
 
-startButton = tk.Button(m, background="#474c56", foreground="#eaeaea", text='Start Server', width=25, command=startServer).grid(row=3, column=1)
+startButton = tk.Button(m, background="#474c56", foreground="#eaeaea", text='Connect', width=25, command=startServer).grid(row=3, column=1)
 exitButton = tk.Button(m, background="#474c56", foreground="#eaeaea", text='Exit', width=25, command=exit_me).grid(row=3, column=0)
 m.configure(bg='#282f38')
 m.mainloop()
