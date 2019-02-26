@@ -1,14 +1,19 @@
-#UDP Client Camera Stream 2019
+# UDP Client Camera Stream 2019
+
 v1.0
+
 [![Build Status](https://travis-ci.com/Osnott/tcp-udp-2019.svg?token=q24MeU1xn4U7gp8yYLme&branch=exe)](https://travis-ci.com/Osnott/tcp-udp-2019)
+
 
 ## Requirements
 
 Please make sure you have python 3.6+ and pip both installed and in your system PATH.
 
+
 ## Setup
 
 Clone this repository. Make sure you have python 3.6+ installed and on your system PATH.
+
 
 ## Building
 
@@ -22,6 +27,7 @@ The only thing that you need to do to generate the executable file is run this c
 
 The [build.bat](https://github.com/Osnott/tcp-udp-2019/blob/master/udp_client/build.bat) file is located inside of the [udp_client](https://github.com/Osnott/tcp-udp-2019/tree/master/udp_client) folder.
 
+
 ## Usage
 
 1. Run the compiled executable file (see [Building](#Building))
@@ -30,7 +36,8 @@ The [build.bat](https://github.com/Osnott/tcp-udp-2019/blob/master/udp_client/bu
 1. If you have connected, you should see a camera feed with minimal delay. If you do not see this, please double check the ip, port, and that you are connected to the wifi that the server is on. If all of these are true, please leave an issue in the issues tab.
 1. To close the window, you must type `q` while the window is in the foreground.
 
+
 ## Screenshots
 
-[Here are some screenshots](Screenshot.png)
-[](Screenshot2.png)
+![Here are some screenshots](Screenshot.png)
+![](Screenshot2.png)
