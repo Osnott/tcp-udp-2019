@@ -2,22 +2,22 @@ import cv2
 import sys
 import time
 from client_handler import openServer, recvData, decodeData, checkLostPackets, calculatePings
-import client_gui as gui
+import client_gui
 
 exited = False
 
 
 def start():
     global exited
-    while not gui.ready:
-        if gui.exited:
+    while not client_gui.ready:
+        if client_gui.exited:
             sys.exit(0)
     # UDP_IP = str(sys.argv[1])  # "192.168.43.235"
     # DEBUG = sys.argv[2] == 'True'
     # UDP_PORT = 9998
-    UDP_IP = str(gui.serverData['ip'])
-    UDP_PORT = int(gui.serverData['port'])
-    DEBUG = gui.serverData['debug']
+    UDP_IP = str(client_gui.serverData['ip'])
+    UDP_PORT = int(client_gui.serverData['port'])
+    DEBUG = client_gui.serverData['debug']
     print("CONNECTING TO " + UDP_IP + " ON PORT " + str(UDP_PORT))
     client = openServer(UDP_IP, UDP_PORT)
     font = cv2.FONT_HERSHEY_SIMPLEX
