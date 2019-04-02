@@ -13,7 +13,7 @@ class DriverstationConnectionHandler(socketserver.BaseRequestHandler):
         while True:
             # print("CONNECTED: " + str(initial.decode('utf-8')))
             grabbed, feed = camera.read()
-            encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 40]
+            encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 10]
             result, encimg = cv2.imencode('.jpg', feed, encode_param)
             packet = pickle.dumps([encimg, packets])
             socket.sendto(packet, self.client_address)
