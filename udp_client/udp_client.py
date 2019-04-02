@@ -45,14 +45,11 @@ def start():
                 )
                 cv2.putText(
                     decimg,
-                    "Packet Loss: "
-                    + str(
+                    "Packet Loss: " + str(
                         round(
-                            (client["packets_lost"] / (client["expected_packet"] + 1))
-                            * 100
+                            (client["packets_lost"] / (client["expected_packet"] + 1)) * 100
                         )
-                    )
-                    + "%",
+                    ) + "%",
                     (450, 460),
                     font,
                     0.5,
