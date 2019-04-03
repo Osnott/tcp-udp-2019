@@ -20,10 +20,8 @@ def start():
             sys.exit(0)
     UDP_IP = str(client_gui.serverData["ip"])
     UDP_PORT = int(client_gui.serverData["port"])
-    DEBUG = client_gui.serverData["debug"]
     print("CONNECTING TO " + UDP_IP + " ON PORT " + str(UDP_PORT))
     client = openServer(UDP_IP, UDP_PORT)
-    font = cv2.FONT_HERSHEY_SIMPLEX
     queue = FrameQueue(2)
     threadedFrames = threading.Thread(target=run, args=(client["sock"], 65536, queue))
     if initRecvData(client["sock"], 65536) != b"":
@@ -31,32 +29,7 @@ def start():
         threadedFrames.start()
         time.sleep(0.5)
         while True:
-            client["recv_packet"], decimg = decodeData(queue._get())
-            if DEBUG:
-                cv2.putText(
-                    decimg,
-                    "Packets Lost: " + str(client["packets_lost"]) + " packets",
-                    (425, 35),
-                    font,
-                    0.5,
-                    (255, 255, 255),
-                    1,
-                    cv2.LINE_AA,
-                )
-                cv2.putText(
-                    decimg,
-                    "Packet Loss: " + str(
-                        round(
-                            (client["packets_lost"] / (client["expected_packet"] + 1)) * 100
-                        )
-                    ) + "%",
-                    (450, 460),
-                    font,
-                    0.5,
-                    (255, 255, 255),
-                    1,
-                    cv2.LINE_AA,
-                )
+            decimg = decodeData(queue._get())
             cv2.namedWindow("Jetson Camera")
             cv2.imshow("Jetson Camera", decimg)
             height, width, channels = decimg.shape

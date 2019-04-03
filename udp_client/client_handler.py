@@ -91,11 +91,9 @@ def decodeData(bytes_data):
     """
     Decodes data and returns the package number and decoded image.
     """
-    data = pickle.loads(bytes_data)
-    img = data[0]
-    recv_packet = data[1]
+    img = pickle.loads(bytes_data)
     decimg = cv2.imdecode(img, 1)
-    return recv_packet, decimg
+    return decimg
 
 
 def checkLostPackets(expected_packet, recv_packet, packets_lost):

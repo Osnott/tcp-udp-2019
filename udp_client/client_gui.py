@@ -16,14 +16,11 @@ e2.grid(row=1, column=1)
 e1.insert(0, "192.168.1.7")
 e2.insert(0, "9999")
 var1 = tk.IntVar()
-checkbox = tk.Checkbutton(
-    m, background="#282f38", foreground="#a8acb5", text="Debug", variable=var1
-).grid(row=2, column=1)
 
 
 def startServer():
     global serverData, e1, e2, var1, ready, m
-    serverData = {"ip": e1.get(), "port": int(e2.get()), "debug": var1.get() == 1}
+    serverData = {"ip": e1.get(), "port": int(e2.get())}
     ready = True
     m.destroy()
 
