@@ -7,6 +7,10 @@ failedInit = False
 
 
 class FrameQueue(queue.LifoQueue):
+    """
+    LifoQueue for incoming frames to get the most recent for lower latency
+    """
+
     def _get(self):
         return self.queue[-1]
 
@@ -36,11 +40,9 @@ def openServer(ip, port):
         "recv_packet": 0,
     }
 
-    # client['sock'].setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     client["sock"].settimeout(5)
     data = "W".encode("utf-8")
     client["sock"].sendto(data, (ip, port))
-    # client['sock'].bind((ip, port))
     return client
 
 
