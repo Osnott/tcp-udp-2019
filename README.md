@@ -38,6 +38,7 @@ build.bat
 
 The [build.bat](https://github.com/Osnott/tcp-udp-2019/blob/master/udp_client/build.bat) file is located inside of the [udp_client](https://github.com/Osnott/tcp-udp-2019/tree/master/udp_client) folder.
 
+***NOTICE: THE BUILD.BAT FILE ONLY BUILDS FOR WINDOWS MACHINES***
 
 ## Usage
 
