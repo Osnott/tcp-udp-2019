@@ -13,7 +13,7 @@ class DriverstationConnectionHandler(socketserver.BaseRequestHandler):
         while True:
             # print("CONNECTED: " + str(initial.decode('utf-8')))
             grabbed, feed = camera.read()
-            encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 40]
+            encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 10]
             result, encimg = cv2.imencode('.jpg', feed, encode_param)
             packet = pickle.dumps([encimg, packets])
             socket.sendto(packet, self.client_address)
@@ -26,18 +26,3 @@ print("STARTING SERVER ON " + HOST + " ON PORT " + str(PORT))
 server = socketserver.UDPServer((HOST, PORT), DriverstationConnectionHandler)
 print("SERVER ONLINE")
 server.serve_forever()
-
-
-# class DriverstationConnectionFactoryThread(StoppableThread):
-#     def __init__(self):
-#         self._HOST, self._PORT = netifaces.ifadresses("eth0")[netifaces.AF_INET][0]["addr"], 9999
-#         self._server = socketserver.UDPServer((self._HOST, self._PORT), DriverstationConnectionHandler())
-#
-#     def run(self):
-#         try:
-#             self._server.serve_forever()
-#         except Exception:
-#             self.stop()
-#
-#     def stop(self):
-#         self._server.shutdown()
