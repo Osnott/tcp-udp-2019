@@ -13,8 +13,8 @@ e1 = tk.Entry(m, background="#474c56", foreground="#eaeaea")
 e2 = tk.Entry(m, background="#474c56", foreground="#eaeaea")
 e1.grid(row=0, column=1)
 e2.grid(row=1, column=1)
-e1.insert(0, "192.168.1.7")
-e2.insert(0, "9999")
+e1.insert(0, "10.64.79.7")
+e2.insert(0, "1183")
 var1 = tk.IntVar()
 checkbox = tk.Checkbutton(
     m, background="#282f38", foreground="#a8acb5", text="Debug", variable=var1
