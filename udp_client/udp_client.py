@@ -31,7 +31,12 @@ def start():
         threadedFrames.start()
         time.sleep(0.5)
         while True:
-            client["recv_packet"], decimg = decodeData(queue._get())
+            try:
+                client["recv_packet"], decimg = decodeData(queue._get())
+            except EOFError:
+                print("ERROR! CONNECTION LOST OR SERVER NOT OPEN!\n")
+                print("EXITING")
+                sys.exit(0)
             if DEBUG:
                 cv2.putText(
                     decimg,
