@@ -1,6 +1,6 @@
 # UDP Client Camera Stream 2019
 
-v1.5a
+v1.2a
 
 [![Build Status](https://travis-ci.com/Osnott/tcp-udp-2019.svg?token=q24MeU1xn4U7gp8yYLme&branch=exe)](https://travis-ci.com/Osnott/tcp-udp-2019)
 

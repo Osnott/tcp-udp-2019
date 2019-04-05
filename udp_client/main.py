@@ -3,7 +3,7 @@ import client_gui
 import client_handler
 import sys
 
-print("Ver: 1.5a")
+print("Ver: 1.2a")
 udp_client.start()
 
 while True:  # runs until exited
