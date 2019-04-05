@@ -26,18 +26,3 @@ print("STARTING SERVER ON " + HOST + " ON PORT " + str(PORT))
 server = socketserver.UDPServer((HOST, PORT), DriverstationConnectionHandler)
 print("SERVER ONLINE")
 server.serve_forever()
-
-
-# class DriverstationConnectionFactoryThread(StoppableThread):
-#     def __init__(self):
-#         self._HOST, self._PORT = netifaces.ifadresses("eth0")[netifaces.AF_INET][0]["addr"], 9999
-#         self._server = socketserver.UDPServer((self._HOST, self._PORT), DriverstationConnectionHandler())
-#
-#     def run(self):
-#         try:
-#             self._server.serve_forever()
-#         except Exception:
-#             self.stop()
-#
-#     def stop(self):
-#         self._server.shutdown()
